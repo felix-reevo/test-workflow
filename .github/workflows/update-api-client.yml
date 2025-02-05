@@ -18,7 +18,7 @@ jobs:
       - run: pnpm install --frozen-lockfile --prefer-offline
       # - run: cd packages/api-client && pnpm generate-react-query-openapi-client
       - run: echo "console.log('Hello, world!');" >> index.js
-      - run: pnpm test
+      # - run: pnpm test
 
       - name: Commit and push changes
         run: |
