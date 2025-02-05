@@ -25,14 +25,14 @@ jobs:
       - run: echo "console.log('Hello, world!');" >> index.js
       # - run: pnpm test
 
-      - name: Commit and push changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b update-api-client-${{ github.run_id }}
-          git add -A
-          git commit -m "chore: update api client"
-          git push origin update-api-client-${{ github.run_id }}
+      # - name: Commit and push changes
+      #   run: |
+      #     git config --global user.name "github-actions[bot]"
+      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      #     git checkout -b update-api-client-${{ github.run_id }}
+      #     git add -A
+      #     git commit -m "chore: update api client"
+      #     git push origin update-api-client-${{ github.run_id }}
 
       - name: Create a pull request
         id: create_pr
