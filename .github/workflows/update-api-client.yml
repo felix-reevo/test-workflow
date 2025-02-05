@@ -37,11 +37,20 @@ jobs:
         id: create_pr
         uses: peter-evans/create-pull-request@v6
         with:
-          branch: update-api-client-${{ github.run_id }}
+          branch: update-api-client
           base: main
           title: 'Update API Client'
           body: 'This PR contains updates to the API client.'
           reviewers: ${{ github.actor }}
+
+      - name: Close old PRs with the same title
+        run: |
+          PRS=$(gh pr list --state open --json number,title --jq '.[] | select(.title=="Update API Client") | .number')
+          for PR in $PRS; do
+            gh pr close $PR --delete-branch
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Enable auto-merge
         run: |
