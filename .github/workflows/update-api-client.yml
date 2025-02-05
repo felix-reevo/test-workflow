@@ -1,0 +1,46 @@
+name: Update API Client
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+        node-version-file: '.nvmrc'
+        cache: pnpm
+
+      - run: pnpm install --frozen-lockfile --prefer-offline
+      # - run: cd packages/api-client && pnpm generate-react-query-openapi-client
+      - run: echo "console.log('Hello, world!');" >> index.js
+      - run: pnpm test
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b update-api-client-${{ github.run_id }}
+          git add -A
+          git commit -m "chore: update api client"
+          git push origin update-api-client-${{ github.run_id }}
+
+      - name: Create a pull request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: update-api-client-${{ github.run_id }}
+          base: main
+          title: 'Update API Client'
+          body: 'This PR contains updates to the API client.'
+          reviewers: ${{ github.actor }}
+
+      - name: Enable auto-merge
+        run: |
+          gh pr merge --auto --squash ${{ steps.create_pr.outputs.pull-request-number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
