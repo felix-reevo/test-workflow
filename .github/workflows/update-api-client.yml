@@ -1,5 +1,10 @@
 name: Update API Client
 
+permissions:
+  contents: write  # 👈 Allows pushing changes
+  pull-requests: write  # 👈 Allows PR creation (if needed)
+
+
 on:
   workflow_dispatch:
 
